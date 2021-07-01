@@ -10,7 +10,8 @@ Nous allons voir comment utiliser les informations d'Azure Log Analytics afin de
 - Optinonel : une licence Power BI Pro ou Premium
 
 
-## Configuration d'Azure Purview
+## Azure Purview
+### Configuration d'Azure Purview
 
 Dans un premier temps, nous allons configuer Azure Purview afin d'envoyer les informations de télémétries à Azure Log Analytics
 
@@ -28,4 +29,50 @@ Puis dans la partie "Destination details" cochez la case **"Send to Log Analytic
 Cliquez sur le bouton **"Save"**
 
 ![sparkle](Pictures/002.png)
+
+
+## Azure Log Analytics
+### Création de la requête Azure Log Analytics
+
+Depuis le portail Azure, cherchez et sélectionnez votre espace de travail Azure Log Analytics
+
+Puis cliquez sur **"Logs"**
+
+
+![sparkle](Pictures/003.png)
+
+Nous allons utiliser les informations provenant de la table "PurviewScanStatusLogs"
+Copiez la requête ci-dessous afin de récupérer les logs des 30 derniers jours :
+
+```javascript
+PurviewScanStatusLogs
+| where TimeGenerated > ago(30d)
+```
+
+Collez cette requête dans l'éditeur comme illustré dans la copie d'écran ci-dessous, puis cliquez sur **"Run"**  :
+
+![sparkle](Pictures/004.png)
+
+### Export vers Power BI
+Maintenant que nous avons le résultat désiré, nous allons l'exporter vers Power BI
+
+CLiquez sur le bouton **"Export"**, puis sur **"Export to Power BI (M query)"**
+
+![sparkle](Pictures/005.png)
+
+Un fichier texte est alors généré puis téléchargé avec le script M permettant la récupération des données depuis Power BI Desktop.
+
+![sparkle](Pictures/006.png)
+
+## Création du rapport Power BI
+### Récupéation des données Azure Log Analytics
+
+Ouvrez le fichier texte précédement téléchargé puis copiez le script M (la partie encadrée en rouge)
+
+![sparkle](Pictures/007.png)
+
+Depuis Power BI desktop, cliquez sur **"Get data"** puis **"Blank Query"**
+
+![sparkle](Pictures/008.png)
+
 
