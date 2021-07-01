@@ -90,7 +90,7 @@ Vous devez obtenir un résultat similaire à celui ci-dessous. Vous pouvez aussi
 
 ![sparkle](Pictures/011.png)
 
-Cliquez sur le bouton **"Close & Apply"** pour revenir dans Power BI desktop et commencer à créer votre rapport
+Cliquez sur le bouton **"Close & Apply"** pour revenir dans Power BI Desktop et commencer à créer votre rapport
 
 ![sparkle](Pictures/012.png)
 
