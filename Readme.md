@@ -1,6 +1,6 @@
 # Création d'un rapport de rétrofacturation pour Azure Purview
 
-Nous allons voir comment utiliser les informations d'Azure Log Analytics afin de créer un rapport permettant la retrofacturation d'utilisation des scans.
+Nous allons voir comment utiliser les informations d'Azure Log Analytics afin de créer un rapport permettant la rétrofacturation d'utilisation des scans.
 Ci-dessous une illustration d'un exemple de type de rapport que vous pourrez créer :
 
 ![sparkle](Pictures/000.png)
