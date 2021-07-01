@@ -11,7 +11,7 @@ Ci-dessous une illustration d'un exemple de type de rapport que vous pourrez cr√
 - Un compte [Azure Purview](https://docs.microsoft.com/fr-fr/azure/purview/create-catalog-portal)
 - Un espace de travail [Azure Log Analytics](https://docs.microsoft.com/fr-fr/azure/azure-monitor/logs/quick-create-workspace)
 - [Power BI Desktop](https://www.microsoft.com/fr-fr/download/details.aspx?id=58494) 
-- Optinonel : une licence Power BI Pro ou Premium
+- Optionel : une licence Power BI Pro ou Premium
 
 
 ## Azure Purview
