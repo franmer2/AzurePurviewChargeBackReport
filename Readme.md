@@ -1,6 +1,10 @@
 # Création d'un rapport de rétrofacturation pour Azure Purview
 
 Nous allons voir comment utiliser les informations d'Azure Log Analytics afin de créer un rapport permettant la retrofacturation d'utilisation des scans.
+Ci-dessous une illustration d'un exemple de type de rapport que vous pourrez créer :
+
+![sparkle](Pictures/000.png)
+
 
 ## Pre requis
 
@@ -71,8 +75,22 @@ Ouvrez le fichier texte précédement téléchargé puis copiez le script M (la 
 
 ![sparkle](Pictures/007.png)
 
-Depuis Power BI desktop, cliquez sur **"Get data"** puis **"Blank Query"**
+Depuis Power BI Desktop, cliquez sur **"Get data"** puis **"Blank Query"**
 
 ![sparkle](Pictures/008.png)
 
+une fois dans Power Query Editor, dans l'onglet **"Home"**, cliquez sur **"Advanced Editor"**
+
+![sparkle](Pictures/009.png)
+
+Supprimez le code par défault puis collez le script M copiez précédement, puis cliquez sur **"Done"** :
+![sparkle](Pictures/010.png)
+
+Vous devez obtenir un résultat similaire à celui ci-dessous. Vous pouvez aussi renommer la requête directement depuis le champ **"Name"**
+
+![sparkle](Pictures/011.png)
+
+Cliquez sur le bouton **"Close & Apply"** pour revenir dans Power BI desktop et commencer à créer votre rapport
+
+![sparkle](Pictures/012.png)
 
