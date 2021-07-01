@@ -28,7 +28,7 @@ Dans la fenêtre "Diagnostic setting", dans la partie "Category details" cochez 
 - ScanStatusLogEvent
 - AllMetrics
 
-Puis dans la partie "Destination details" cochez la case **"Send to Log Analytics workspace"** et resneignez les information de votre espace de travail Azure Log analytics.
+Puis dans la partie "Destination details" cochez la case **"Send to Log Analytics workspace"** et renseignez les informations de votre espace de travail Azure Log Analytics.
 
 Cliquez sur le bouton **"Save"**
 
