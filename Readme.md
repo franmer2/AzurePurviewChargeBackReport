@@ -94,3 +94,26 @@ Cliquez sur le bouton **"Close & Apply"** pour revenir dans Power BI Desktop et 
 
 ![sparkle](Pictures/012.png)
 
+
+
+### Récupération des informations sur les collections
+#### Création d'un principal de service
+Le but ici est de récupérer des informations venant d'Azure Purview afin de les inclure dans notre rapport.
+Nous allons récupérer les données concernant les collections définies dans Azure Purview :
+
+![sparkle](Pictures/013.png)
+
+Dans un premier temps, il est nécessaire d'inscrire une application avec Azure Active Directoy et créer un principal de service
+La procédure se trouve ici : https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal#register-an-application-with-azure-ad-and-create-a-service-principal
+
+Copiez quelque part les informations suivantes :
+
+- Application (client) ID
+- Directory (tenant) ID
+- Secret
+
+#### Connexion à l'API Azure Purview
+
+Depuis Power BI desktop, dans l'onglet "Home",  cliquez sur **"Transform Data"**
+
+![sparkle](Pictures/014.png)
