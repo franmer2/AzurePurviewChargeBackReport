@@ -117,3 +117,91 @@ Copiez quelque part les informations suivantes :
 Depuis Power BI desktop, dans l'onglet "Home",  cliquez sur **"Transform Data"**
 
 ![sparkle](Pictures/014.png)
+
+Une fois dans Power Query Editor, cliquez sur **"New source"** puis **"Blank query"**,
+puis copiez le script ci-dessous et remplacez les valeurs. 
+
+```javascript
+let
+    
+    url = "https://login.microsoftonline.com/<YOUR TENANT ID>/oauth2/token",
+    myGrant_type = "client_credentials",
+    myResource = "73c2949e-da2d-457a-9607-fcc665198967",  //It could also be "https://purview.azure.net" 
+    myClient_id = "<YOUR CLIENT ID>",
+    myClient_secret = "<YOUR CLIENT SECRET>",
+
+    body  = "grant_type=" & myGrant_type & "&resource=" & myResource & "&client_id=" & myClient_id & "&client_secret=" & myClient_secret,
+    tokenResponse = Json.Document(Web.Contents(url,[Headers = [#"Content-Type"="application/x-www-form-urlencoded"], Content =  Text.ToBinary(body) ] )),   
+    
+        
+    
+    data_url = "https://<YOUR AZURE PURVIEW ACCOUNT NAME>.scan.purview.azure.com/datasources?api-version=2018-12-01-preview",
+    AccessTokenHeader = "Bearer " & tokenResponse[access_token],
+
+    Source = Json.Document(Web.Contents(data_url, [Headers=[Authorization= AccessTokenHeader,#"Content-Type"="application/json"]])),
+    value = Source[value],
+    #"Converted to Table" = Table.FromList(value, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+    #"Expanded Column1" = Table.ExpandRecordColumn(#"Converted to Table", "Column1", {"properties", "kind", "id", "name"}, {"properties", "kind", "id", "name"}),
+    #"Expanded properties" = Table.ExpandRecordColumn(#"Expanded Column1", "properties", {"createdAt", "lastModifiedAt", "parentCollection", "collection", "serviceUrl", "roleARN", "awsAccountId", "endpoint", "resourceGroup", "subscriptionId", "location", "resourceName", "tenant", "serverEndpoint", "dedicatedSqlEndpoint", "serverlessSqlEndpoint", "host", "applicationServer", "systemNumber", "clusterUrl", "port", "service"}, {"createdAt", "lastModifiedAt", "parentCollection", "collection", "serviceUrl", "roleARN", "awsAccountId", "endpoint", "resourceGroup", "subscriptionId", "location", "resourceName", "tenant", "serverEndpoint", "dedicatedSqlEndpoint", "serverlessSqlEndpoint", "host", "applicationServer", "systemNumber", "clusterUrl", "port", "service"}),
+    #"Expanded parentCollection" = Table.ExpandRecordColumn(#"Expanded properties", "parentCollection", {"type", "referenceName"}, {"parentCollection.type", "parentCollection.referenceName"}),
+    #"Removed Other Columns" = Table.SelectColumns(#"Expanded parentCollection",{"parentCollection.referenceName", "kind", "id", "name"})
+in
+    #"Removed Other Columns"
+
+```
+
+Vous devez obtenir quelque chose de similaire à la copie d'écran ci-dessous:
+
+![](Pictures/016.png)
+
+
+Cliquez sur le bouton **"Done"**. Vous devirez obtenir un résultat similaire à celui ci-dessous.
+Sur la droite, cliquez dans le champ **"Name"** afin de changer le nom de votre requête.
+
+![](Pictures/017.png)
+
+Maintenant que vous possédez la requête initiale qui récupère les données, nous allons la référencer, afin de s'en servir de base pour reconstruire la hiérarchie de notre organisation.
+
+Faîtes un clic droit sur la requête Azure Purview précédement créée, puis sélectionnez **"reference"**
+
+![](Pictures/018.png)
+
+Une fois la référence faîtes, sélectionnez la nouvelle requête puis cliquez sur **"Advanced Editor"**. Vous devriez obtenir quelque chose de similaire à la copie d'écran ci-dessous
+
+![](Pictures/019.png)
+
+
+Copiez le script M ci-dessous afin de reconstruire la hiérarchie de l'organigramme présent dans Azure Purview
+
+```Javascript
+let
+    Source = AzurePurviewData,
+    #"Filtered Rows" = Table.SelectRows(Source, each ([kind] = "Collection")),
+    #"Renamed Columns" = Table.RenameColumns(#"Filtered Rows",{{"parentCollection.referenceName", "ParentName"}, {"name", "ChildName"}}),
+
+    ListChild = List.Buffer(#"Renamed Columns"[ChildName]),
+    ListParent = List.Buffer(#"Renamed Columns"[ParentName]),
+
+
+    fnCreateHiearchy = (n as text) as text =>
+        let 
+            ParentPosition = List.PositionOf (ListChild, n),
+            ParentName = ListParent{ParentPosition},
+            ChildName = ListChild{ParentPosition}     
+        in 
+            if ParentName = null then ListChild{ParentPosition} else @fnCreateHiearchy(ParentName) & "|" & ChildName,
+
+    FinaleTable = Table.AddColumn(#"Renamed Columns", "Collections", each fnCreateHiearchy([ChildName]), type text)
+in
+    FinaleTable
+
+```
+
+Ci-dessous une illustration après la copie du script M:
+
+![](Pictures/020.png)
+
+Cliquez sur le bouton **"Done"**. Vous devriez obtenir le résultat suivant. Pensez à renommer votre requête.
+
+![](Pictures/021.png)
+
