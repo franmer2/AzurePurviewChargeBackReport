@@ -201,7 +201,11 @@ Ci-dessous une illustration après la copie du script M:
 
 ![](Pictures/020.png)
 
-Cliquez sur le bouton **"Done"**. Vous devriez obtenir le résultat suivant. Pensez à renommer votre requête.
+Cliquez sur le bouton **"Done"**. Vous devriez obtenir le résultat suivant. Notez la nouvelle colonne **"Collections"** qui va représenter les relations Parent-Enfants de votre organigramme.
+
+Pensez à renommer votre requête.
 
 ![](Pictures/021.png)
+
+Maintenant que vous avez la matière de base, vous pouvez continuer à designer votre rapport comme bon vous semble. Par exemple, utiliser la fonctionalité **"Split Column by delimiter"** afin de créer une colone par enfant de votre organigramme, pour les utiliser ensuite avec le visuel **"Decomposition tree"** (Comme je l'ai fait dans le rapport quwe je vous livre en exemple).
 
