@@ -1,5 +1,12 @@
 # Création d'un rapport de rétrofacturation pour Azure Purview
 
+J'ai été ammené à créer ce rapport lors d'un projet client afin de suivre les coûts des différents scans par collection.
+
+
+******************************
+**ATTENTION**. La méthode des scans dans Azure Purview va changer et va devenir dynamic. Il se peut donc que les informations présentes dans Azure Log Analytics ne soient plus fiable le temps d'obtenir les nouvelles métriques. Cependant, cet article vous aidera quand-même si vous souhaitez créer vos propores rapports Power BI en utilisant l'API Azure Purview   
+******************************
+
 Nous allons voir comment utiliser les informations d'Azure Log Analytics et d'Azure Purview afin de créer un rapport permettant la rétrofacturation d'utilisation des scans.
 Ci-dessous une illustration d'un exemple de type de rapport que vous pourrez créer :
 
@@ -213,7 +220,7 @@ Pensez à renommer votre requête.
 
 ![](Pictures/021.png)
 
-Maintenant que vous avez la matière de base, vous pouvez continuer à designer votre rapport comme bon vous semble. Par exemple, utiliser la fonctionalité **"Split Column by delimiter"** afin de créer une colone par enfant de votre organigramme, pour les utiliser ensuite avec le visuel **"Decomposition tree"** (Comme je l'ai fait dans le rapport quwe je vous livre en exemple).
+Maintenant que vous avez la matière de base, vous pouvez continuer à développer votre rapport comme bon vous semble. Par exemple, utiliser la fonctionalité **"Split Column by delimiter"** afin de créer une colone par enfant de votre organigramme, pour les utiliser ensuite avec le visuel **"Decomposition tree"** (Comme je l'ai fait dans le rapport que je vous livre en exemple).
 
 #### Niveau de confidentialité
 
@@ -242,4 +249,42 @@ Dans le champ **"Privacy Level"**, sélectionnez le niveau **"organizational"**,
 Répétez l'opération pour les autres sources de données
 
 ## Ce que j'ai apris avec la céation de ce rapport
+### Mise à jour du schéma du model
+J'ai tenté de créer de manière dynamique la création du nombre de colonne en fonction du nombre de niveau dans mon organigramme.
+
+Dans Power BI Desktop, j'ai donc utilisé le script M suivant:
+
+```Javascript
+    DynamicColumList = List.Transform({
+        1..List.Max(Table.AddColumn(#"Renamed Columns1","NbDelimiter",each List.Count(Text.PositionOfAny([CollectionLevel],{"|"},Occurrence.All)
+        ))[NbDelimiter]
+        )+1
+
+    },each "CollectionLevel." & Text.From(_)),  
+    
+    
+    #"Split Column by Delimiter" = Table.SplitColumn(#"Renamed Columns1", "CollectionLevel", Splitter.SplitTextByDelimiter("|", QuoteStyle.Csv),DynamicColumList)
+
+```
+
+Cela fonctionne très bien dans Power BI Desktop, et mon modèle rajoute ou enlève les colonnes en fonction du nombre de niveau dans mon organigramme. Mais pas dans Power BI service. Lors de la mise à jour du rapport :
+
+Power BI Desktop recrée le schema du model alors que Power BI service se contente de recharger les informations lors de la mise à jours, sans touché au schema. I lfaut donc anticiper le nombre de niveau de l'on souhaite afficher dans le rapport
+
+
+### Niveau de confidentialité
+Lors de la première création du rapport, j'ai voulu séparer les différents requêtes par "rôle", si on peut dire. Par exemple, une première requêtre pour récupére le "Bearer Token", une autre pour se connecter à Azure Purview, puis une autre pour créer les hiérarchie.
+
+Cependant, même si ça fonctionnait très bien avec Power BI Dekstop, une fois publié dans Power BI Service, j'obtenai l'erreur suivante après la mise à jour :
+
+![](Pictures/027.png)
+
+*"Processing error: [Unable to combine data] Section1/AzurePurviewData/Removed Other Columns references other queries or steps, so it may not directly access a data source. Please rebuild this data combination."*
+
+J'ai donc du fusionner mes 2 premières requêtes (obtention du token puis connection à Azure Purview) puis bien définir les niveaux de confidentialité.
+
+
+
+
+
 
