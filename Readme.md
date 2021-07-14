@@ -220,12 +220,12 @@ Pensez à renommer votre requête.
 
 ![](Pictures/021.png)
 
-Maintenant que vous avez la matière de base, vous pouvez continuer à développer votre rapport comme bon vous semble. Par exemple, utiliser la fonctionalité **"Split Column by delimiter"** afin de créer une colone par enfant de votre organigramme, pour les utiliser ensuite avec le visuel **"Decomposition tree"** (Comme je l'ai fait dans le rapport que je vous livre en exemple).
+Maintenant que vous avez la matière de base, vous pouvez continuer à développer votre rapport comme bon vous semble. Par exemple, utiliser la fonctionnalité **"Split Column by delimiter"** afin de créer une colonne par enfant de votre organigramme, pour les utiliser ensuite avec le visuel **"Decomposition tree"**.
 
 #### Niveau de confidentialité
 
 Si le rapport doit être déployé sur Power BI Service, il est important de définir le bon niveau de confidentialité pour vos sources de données.
-Lors de la première connexion à Azure Log Analytics, la fenêtre ci dessous apparaît. Choisissez **"Organizational account"** et cliquez sur **"Sign In"** 
+Lors de la première connexion à Azure Log Analytics, la fenêtre ci-dessous apparaît. Choisissez **"Organizational account"** et cliquez sur **"Sign In"** 
 
 ![](Pictures/022.png)
 
@@ -234,7 +234,7 @@ De ce fait la connexion s'est faite en utilisant un niveau **"Organizational"** 
 
 Pour **TOUTES** les autres sources de données, faîtes les étapes suivantes
 
-CLiquez sur **"Transform data"** puis sur **"Data source settings"**
+Cliquez sur **"Transform data"** puis sur **"Data source settings"**
 
 ![](Pictures/023.png)
 
@@ -248,11 +248,11 @@ Dans le champ **"Privacy Level"**, sélectionnez le niveau **"organizational"**,
 
 Répétez l'opération pour les autres sources de données
 
-## Ce que j'ai apris avec la céation de ce rapport
+## Ce que j'ai appris avec la création de ce rapport
 ### Mise à jour du schéma du model
 J'ai tenté de créer de manière dynamique la création du nombre de colonne en fonction du nombre de niveau dans mon organigramme.
 
-Dans Power BI Desktop, j'ai donc utilisé le script M suivant:
+Dans Power BI Desktop, j'ai donc utilisé le script M suivant :
 
 ```Javascript
     DynamicColumList = List.Transform({
