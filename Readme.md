@@ -1,4 +1,4 @@
-# Création d'un rapport de rétrofacturation pour Azure Purview
+# Création d'un rapport de rétro facturation pour Azure Purview
 
 J'ai été amené à créer ce rapport lors d'un projet client afin de suivre les coûts des différents scans par collection. Un exemple de ce rapport est disponible [ici](https://github.com/franmer2/AzurePurviewChargeBackReport/tree/main/Power%20BI%20report). 
 
@@ -7,7 +7,7 @@ J'ai été amené à créer ce rapport lors d'un projet client afin de suivre le
 **ATTENTION**. La méthode des scans dans Azure Purview va changer et va devenir dynamique. Il se peut donc que les informations présentes dans Azure Log Analytics ne soient plus fiable le temps d'obtenir les nouvelles métriques. Cependant, cet article vous aidera quand-même si vous souhaitez créer vos propres rapports Power BI en utilisant l'API Azure Purview   
 ******************************
 
-Nous allons voir comment utiliser les informations d'Azure Log Analytics et d'Azure Purview afin de créer un rapport permettant la rétrofacturation d'utilisation des scans.
+Nous allons voir comment utiliser les informations d'Azure Log Analytics et d'Azure Purview afin de créer un rapport permettant la rétro facturation d'utilisation des scans.
 Ci-dessous une illustration d'un exemple de type de rapport que vous pourrez créer :
 
 ![sparkle](Pictures/000.png)
@@ -20,13 +20,13 @@ Ci-dessous une illustration d'un exemple de type de rapport que vous pourrez cr�
 - Un compte [Azure Purview](https://docs.microsoft.com/fr-fr/azure/purview/create-catalog-portal)
 - Un espace de travail [Azure Log Analytics](https://docs.microsoft.com/fr-fr/azure/azure-monitor/logs/quick-create-workspace)
 - [Power BI Desktop](https://www.microsoft.com/fr-fr/download/details.aspx?id=58494) 
-- Optionel : une licence Power BI Pro ou Premium
+- Optionnel : une licence Power BI Pro ou Premium
 
 
 ## Azure Purview
 ### Configuration d'Azure Purview
 
-Dans un premier temps, nous allons configuer Azure Purview afin d'envoyer les informations de télémétries à Azure Log Analytics
+Dans un premier temps, nous allons configurer Azure Purview afin d'envoyer les informations de télémétries à Azure Log Analytics
 
 Depuis le portail Azure, cherchez et sélectionnez votre compte Azure Purview
 Cliquez sur **"Diagnostic settings"**, puis sur **"+ Add diagnostic setting"**
@@ -78,9 +78,9 @@ Un fichier texte est alors généré puis téléchargé avec le script M permett
 ![sparkle](Pictures/006.png)
 
 ## Création du rapport Power BI
-### Récupéation des données Azure Log Analytics
+### Récupération des données Azure Log Analytics
 
-Ouvrez le fichier texte précédement téléchargé puis copiez le script M (la partie encadrée en rouge)
+Ouvrez le fichier texte précédemment téléchargé puis copiez le script M (la partie encadrée en rouge)
 
 ![sparkle](Pictures/007.png)
 
@@ -92,7 +92,7 @@ Une fois dans Power Query Editor, dans l'onglet **"Home"**, cliquez sur **"Advan
 
 ![sparkle](Pictures/009.png)
 
-Supprimez le code par défault puis collez le script M copiez précédement, puis cliquez sur **"Done"** :
+Supprimez le code par défaut puis collez le script M copiez précédemment, puis cliquez sur **"Done"** :
 ![sparkle](Pictures/010.png)
 
 Vous devez obtenir un résultat similaire à celui ci-dessous. Vous pouvez aussi renommer la requête directement depuis le champ **"Name"**
@@ -123,7 +123,7 @@ Copiez quelque part les informations suivantes :
 
 #### Connexion à l'API Azure Purview
 
-Depuis Power BI desktop, dans l'onglet "Home",  cliquez sur **"Transform Data"**
+Depuis Power BI desktop, dans l'onglet "Home", cliquez sur **"Transform Data"**
 
 ![sparkle](Pictures/014.png)
 
@@ -269,7 +269,7 @@ Dans Power BI Desktop, j'ai donc utilisé le script M suivant :
 
 Cela fonctionne très bien dans Power BI Desktop, et mon modèle rajoute ou enlève les colonnes en fonction du nombre de niveau dans mon organigramme. Mais pas dans Power BI service. Lors de la mise à jour du rapport
 
-Power BI Desktop recrée le schéma du model alors que Power BI service se contente de recharger les informations lors de la mise à jours, sans toucher au schéma. Il faut donc anticiper le nombre de niveau de l'on souhaite afficher dans le rapport.
+Power BI Desktop recrée le schéma du model alors que Power BI service se contente de recharger les informations lors de la mise à jour, sans toucher au schéma. Il faut donc anticiper le nombre de niveau de l'on souhaite afficher dans le rapport.
 
 
 ### Niveau de confidentialité
