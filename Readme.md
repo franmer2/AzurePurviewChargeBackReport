@@ -217,7 +217,7 @@ Lors de la première connexion à Azure Log Analytics, la fenêtre ci dessous ap
 ![](Pictures/022.png)
 
 
-De ce fait la connexion s'est faite en utilisant un niveau **"Organizational"** pour cette source de données. Afin d'éviter tout problème une fois le rapport publié sur Power BI Service, il est important que les autres sources de données du rapport soient au même niveau de confidentialité.
+De ce fait la connexion s'est faite en utilisant un niveau **"Organizational"** pour cette source de données. Afin d'éviter tout problème une fois le rapport publié sur Power BI Service, il est important que toutes les autres sources de données du rapport soient au même niveau de confidentialité.
 
 Pour **TOUTES** les autres sources de données, faîtes les étapes suivantes
 
@@ -225,6 +225,15 @@ CLiquez sur **"Transform data"** puis sur **"Data source settings"**
 
 ![](Pictures/023.png)
 
-Dans la fenêtre "
+Dans la fenêtre **"Data Source Setting"**, sélectionnez une source de données puis cliquez sur **"Edit Permissions"**
 
 ![](Pictures/024.png)
+
+Dans le champ **"Privacy Level"**, sélectionnez le niveau **"organizational"**, puis cliquez sur le bouton **"Ok"** pour valider
+
+![](Pictures/025.png)
+
+Répétez l'opération pour les autres sources de données
+
+## Ce que j'ai apris avec la céation de ce rapport
+
