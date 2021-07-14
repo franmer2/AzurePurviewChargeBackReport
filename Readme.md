@@ -4,7 +4,7 @@ J'ai été ammené à créer ce rapport lors d'un projet client afin de suivre l
 
 
 ******************************
-**ATTENTION**. La méthode des scans dans Azure Purview va changer et va devenir dynamic. Il se peut donc que les informations présentes dans Azure Log Analytics ne soient plus fiable le temps d'obtenir les nouvelles métriques. Cependant, cet article vous aidera quand-même si vous souhaitez créer vos propores rapports Power BI en utilisant l'API Azure Purview   
+**ATTENTION**. La méthode des scans dans Azure Purview va changer et va devenir dynamique. Il se peut donc que les informations présentes dans Azure Log Analytics ne soient plus fiable le temps d'obtenir les nouvelles métriques. Cependant, cet article vous aidera quand-même si vous souhaitez créer vos propres rapports Power BI en utilisant l'API Azure Purview   
 ******************************
 
 Nous allons voir comment utiliser les informations d'Azure Log Analytics et d'Azure Purview afin de créer un rapport permettant la rétrofacturation d'utilisation des scans.
@@ -112,7 +112,7 @@ Nous allons récupérer les données concernant les collections définies dans A
 
 ![sparkle](Pictures/013.png)
 
-Dans un premier temps, il est nécessaire d'inscrire une application avec Azure Active Directoy et créer un principal de service
+Dans un premier temps, il est nécessaire d'inscrire une application avec Azure Active Directory et créer un principal de service
 La procédure se trouve ici : https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal#register-an-application-with-azure-ad-and-create-a-service-principal
 
 Copiez quelque part les informations suivantes :
@@ -175,7 +175,7 @@ Sur la droite, cliquez dans le champ **"Name"** afin de changer le nom de votre 
 
 Maintenant que vous possédez la requête initiale qui récupère les données, nous allons la référencer, afin de s'en servir de base pour reconstruire la hiérarchie de notre organisation.
 
-Faîtes un clic droit sur la requête Azure Purview précédement créée, puis sélectionnez **"reference"**
+Faîtes un clic droit sur la requête Azure Purview précédemment créée, puis sélectionnez **"reference"**
 
 ![](Pictures/018.png)
 
