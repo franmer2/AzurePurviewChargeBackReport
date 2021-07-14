@@ -1,6 +1,6 @@
 # Création d'un rapport de rétrofacturation pour Azure Purview
 
-Nous allons voir comment utiliser les informations d'Azure Log Analytics afin de créer un rapport permettant la rétrofacturation d'utilisation des scans.
+Nous allons voir comment utiliser les informations d'Azure Log Analytics et d'Azure Purview afin de créer un rapport permettant la rétrofacturation d'utilisation des scans.
 Ci-dessous une illustration d'un exemple de type de rapport que vous pourrez créer :
 
 ![sparkle](Pictures/000.png)
@@ -8,6 +8,8 @@ Ci-dessous une illustration d'un exemple de type de rapport que vous pourrez cr�
 
 ## Pre requis
 
+- Un abonnement Azure
+- Les permissions pour créer un [principal de service](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal#register-an-application-with-azure-ad-and-create-a-service-principal) 
 - Un compte [Azure Purview](https://docs.microsoft.com/fr-fr/azure/purview/create-catalog-portal)
 - Un espace de travail [Azure Log Analytics](https://docs.microsoft.com/fr-fr/azure/azure-monitor/logs/quick-create-workspace)
 - [Power BI Desktop](https://www.microsoft.com/fr-fr/download/details.aspx?id=58494) 
@@ -45,8 +47,8 @@ Puis cliquez sur **"Logs"**
 
 ![sparkle](Pictures/003.png)
 
-Nous allons utiliser les informations provenant de la table "PurviewScanStatusLogs"
-Copiez la requête ci-dessous afin de récupérer les logs des 30 derniers jours :
+Nous allons utiliser les informations provenant de la table **"PurviewScanStatusLogs"**
+Copiez la requête ci-dessous afin de récupérer, par exemple, les logs des 30 derniers jours :
 
 ```javascript
 PurviewScanStatusLogs
@@ -79,7 +81,7 @@ Depuis Power BI Desktop, cliquez sur **"Get data"** puis **"Blank Query"**
 
 ![sparkle](Pictures/008.png)
 
-une fois dans Power Query Editor, dans l'onglet **"Home"**, cliquez sur **"Advanced Editor"**
+Une fois dans Power Query Editor, dans l'onglet **"Home"**, cliquez sur **"Advanced Editor"**
 
 ![sparkle](Pictures/009.png)
 
@@ -118,8 +120,12 @@ Depuis Power BI desktop, dans l'onglet "Home",  cliquez sur **"Transform Data"**
 
 ![sparkle](Pictures/014.png)
 
-Une fois dans Power Query Editor, cliquez sur **"New source"** puis **"Blank query"**,
-puis copiez le script ci-dessous et remplacez les valeurs. 
+Une fois dans Power Query Editor, cliquez sur **"New source"**, **"Blank query"** puis **"Advanced Editor"**
+
+![sparkle](Pictures/026.png)
+
+
+Puis copiez le script ci-dessous et remplacez les valeurs. 
 
 ```javascript
 let
@@ -150,7 +156,7 @@ in
 
 ```
 
-Vous devez obtenir quelque chose de similaire à la copie d'écran ci-dessous:
+Vous devez obtenir quelque chose de similaire à la copie d'écran ci-dessous :
 
 ![](Pictures/016.png)
 
