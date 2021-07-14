@@ -267,21 +267,21 @@ Dans Power BI Desktop, j'ai donc utilisé le script M suivant :
 
 ```
 
-Cela fonctionne très bien dans Power BI Desktop, et mon modèle rajoute ou enlève les colonnes en fonction du nombre de niveau dans mon organigramme. Mais pas dans Power BI service. Lors de la mise à jour du rapport :
+Cela fonctionne très bien dans Power BI Desktop, et mon modèle rajoute ou enlève les colonnes en fonction du nombre de niveau dans mon organigramme. Mais pas dans Power BI service. Lors de la mise à jour du rapport
 
-Power BI Desktop recrée le schema du model alors que Power BI service se contente de recharger les informations lors de la mise à jours, sans touché au schema. I lfaut donc anticiper le nombre de niveau de l'on souhaite afficher dans le rapport
+Power BI Desktop recrée le schéma du model alors que Power BI service se contente de recharger les informations lors de la mise à jours, sans toucher au schéma. Il faut donc anticiper le nombre de niveau de l'on souhaite afficher dans le rapport.
 
 
 ### Niveau de confidentialité
-Lors de la première création du rapport, j'ai voulu séparer les différents requêtes par "rôle", si on peut dire. Par exemple, une première requêtre pour récupére le "Bearer Token", une autre pour se connecter à Azure Purview, puis une autre pour créer les hiérarchie.
+Lors de la première création du rapport, j'ai voulu séparer les différentes requêtes par "rôle", si on peut dire. Par exemple, une première requête pour récupérer le *"Bearer Token"*, une autre pour se connecter à Azure Purview, puis une autre pour créer les hiérarchies.
 
-Cependant, même si ça fonctionnait très bien avec Power BI Dekstop, une fois publié dans Power BI Service, j'obtenai l'erreur suivante après la mise à jour :
+Cependant, même si ça fonctionnait très bien avec Power BI Desktop, une fois publié dans Power BI Service, j'obtenais l'erreur suivante après la mise à jour :
 
 ![](Pictures/027.png)
 
 *"Processing error: [Unable to combine data] Section1/AzurePurviewData/Removed Other Columns references other queries or steps, so it may not directly access a data source. Please rebuild this data combination."*
 
-J'ai donc du fusionner mes 2 premières requêtes (obtention du token puis connection à Azure Purview) puis bien définir les niveaux de confidentialité.
+J'ai donc dû fusionner mes 2 premières requêtes (obtention du token puis connexion à Azure Purview) puis bien définir les niveaux de confidentialité.
 
 
 
