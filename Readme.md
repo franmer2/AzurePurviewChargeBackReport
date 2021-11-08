@@ -1,6 +1,6 @@
 # Création d'un rapport de rétro facturation pour Azure Purview
 
-J'ai été amené à créer ce rapport lors d'un projet client afin de suivre les coûts des différents scans par collection. Un exemple de ce rapport est disponible ici
+J'ai été amené à créer ce rapport lors d'un projet client afin de suivre les coûts des différents scans par collection. Un exemple de ce rapport est disponible [ici](https://github.com/franmer2/AzurePurviewChargeBackReport/tree/main/Power%20BI%20Report)
 
 
 ******************************
