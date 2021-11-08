@@ -1,6 +1,6 @@
 # Création d'un rapport de rétro facturation pour Azure Purview
 
-J'ai été amené à créer ce rapport lors d'un projet client afin de suivre les coûts des différents scans par collection. Un exemple de ce rapport est disponible [ici](https://github.com/franmer2/AzurePurviewChargeBackReport/tree/main/Power%20BI%20report). 
+J'ai été amené à créer ce rapport lors d'un projet client afin de suivre les coûts des différents scans par collection. Un exemple de ce rapport est disponible 
 
 
 ******************************
@@ -173,18 +173,71 @@ Sur la droite, cliquez dans le champ **"Name"** afin de changer le nom de votre 
 
 ![](Pictures/017.png)
 
-Maintenant que vous possédez la requête initiale qui récupère les données, nous allons la référencer, afin de s'en servir de base pour reconstruire la hiérarchie de notre organisation.
+Répétez l'opération pour créer une nouvelle requête vide et copiez le script ci-dessous.
+Ce script M va appeler la nouvelle API pour récupérer les informations sur les collections.
 
-Faîtes un clic droit sur la requête Azure Purview précédemment créée, puis sélectionnez **"reference"**
+```javascript
+let
+    
+    url = "https://login.microsoftonline.com/<YOUR TENANT ID>/oauth2/token",
+    myGrant_type = "client_credentials",
+    myResource = "73c2949e-da2d-457a-9607-fcc665198967",  //It could also be "https://purview.azure.net" 
+    myClient_id = "<YOUR CLIENT ID>",
+    myClient_secret = "<YOUR CLIENT SECRET>",
+
+    body  = "grant_type=" & myGrant_type & "&resource=" & myResource & "&client_id=" & myClient_id & "&client_secret=" & myClient_secret,
+    tokenResponse = Json.Document(Web.Contents(url,[Headers = [#"Content-Type"="application/x-www-form-urlencoded"], Content =  Text.ToBinary(body) ] )), 
+    
+        
+    
+    data_url = "https://<YOUR AZURE PURVIEW ACCOUNT NAME>.purview.azure.com/account/collections?api-version=2019-11-01-preview",
+    AccessTokenHeader = "Bearer " & tokenResponse[access_token],
+
+    Source = Json.Document(Web.Contents(data_url, [Headers=[Authorization= AccessTokenHeader,#"Content-Type"="application/json"]])),
+    value = Source[value],
+    #"Converted to Table" = Table.FromList(value, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+    #"Expanded Column1" = Table.ExpandRecordColumn(#"Converted to Table", "Column1", {"name", "friendlyName", "parentCollection", "systemData", "collectionProvisioningState", "description"}, {"Column1.name", "Column1.friendlyName", "Column1.parentCollection", "Column1.systemData", "Column1.collectionProvisioningState", "Column1.description"}),
+    #"Expanded Column1.parentCollection" = Table.ExpandRecordColumn(#"Expanded Column1", "Column1.parentCollection", {"type", "referenceName"}, {"Column1.parentCollection.type", "Column1.parentCollection.referenceName"}),
+    #"Expanded Column1.systemData" = Table.ExpandRecordColumn(#"Expanded Column1.parentCollection", "Column1.systemData", {"createdBy", "createdByType", "createdAt", "lastModifiedByType", "lastModifiedAt", "lastModifiedBy"}, {"Column1.systemData.createdBy", "Column1.systemData.createdByType", "Column1.systemData.createdAt", "Column1.systemData.lastModifiedByType", "Column1.systemData.lastModifiedAt", "Column1.systemData.lastModifiedBy"}),
+    #"Lowercased Text" = Table.TransformColumns(#"Expanded Column1.systemData",{{"Column1.name", Text.Lower, type text}}),
+    #"Removed Columns" = Table.RemoveColumns(#"Lowercased Text",{"Column1.systemData.createdBy", "Column1.systemData.createdByType", "Column1.systemData.createdAt", "Column1.systemData.lastModifiedByType", "Column1.systemData.lastModifiedAt", "Column1.systemData.lastModifiedBy", "Column1.collectionProvisioningState"}),
+    #"Sorted Rows" = Table.Sort(#"Removed Columns",{{"Column1.parentCollection.type", Order.Ascending}}),
+    #"Renamed Columns" = Table.RenameColumns(#"Sorted Rows",{{"Column1.parentCollection.referenceName", "ParentName"}, {"Column1.name", "ChildName"}}),
+    #"Sorted Rows1" = Table.Sort(#"Renamed Columns",{{"ParentName", Order.Ascending}}),
+
+    ListChild= List.Buffer(#"Sorted Rows1"[ChildName]),
+    ListParent= List.Buffer(#"Sorted Rows1"[ParentName]),  
+    
+
+    fnCreateHiearchy = (n as text) as text =>
+        let 
+            ParentPosition = List.PositionOf (ListChild, n),
+            ParentName = ListParent{ParentPosition},
+            ChildName = ListChild{ParentPosition}     
+        in 
+            if ParentName = null then ListChild{ParentPosition} else @fnCreateHiearchy(ParentName) & "|" & ChildName,
+            FinaleTable = Table.AddColumn(#"Renamed Columns", "Collections", each fnCreateHiearchy([ChildName]), type text),
+    #"Duplicated Column" = Table.DuplicateColumn(FinaleTable, "Collections", "Collections - Copy"),
+    #"Split Column by Delimiter" = Table.SplitColumn(#"Duplicated Column", "Collections - Copy", Splitter.SplitTextByEachDelimiter({"|"}, QuoteStyle.Csv, true), {"Collections - Copy.1", "Collections - Copy.2"}),
+    #"Changed Type" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"Collections - Copy.1", type text}, {"Collections - Copy.2", type text}}),
+    #"Renamed Columns1" = Table.RenameColumns(#"Changed Type",{{"Collections - Copy.2", "LeafCollection"}}),
+    #"Removed Columns1" = Table.RemoveColumns(#"Renamed Columns1",{"LeafCollection", "Collections - Copy.1"})
+in
+    #"Removed Columns1"
+
+
+```
+
+Vous devez obtenir quelque chose de similaire à la copie d'écran ci-dessous :
 
 ![](Pictures/018.png)
 
-Une fois la référence faîtes, sélectionnez la nouvelle requête puis cliquez sur **"Advanced Editor"**. Vous devriez obtenir quelque chose de similaire à la copie d'écran ci-dessous
+Vous avez maintenant assez d'information pour créer votre rapport. 
 
-![](Pictures/019.png)
+Cependant, ci-dessous, j'ai rajouté un script pour créer une table, afin de combiner les informations des 2 sources et simplifier la vie des utilisateurs finaux:
 
+Dans une nouvelle requête vide, copiez le script ci-dessous :
 
-Copiez le script M ci-dessous afin de reconstruire la hiérarchie de l'organigramme présent dans Azure Purview
 
 ```Javascript
 let
@@ -214,11 +267,7 @@ Ci-dessous une illustration après la copie du script M:
 
 ![](Pictures/020.png)
 
-Cliquez sur le bouton **"Done"**. Vous devriez obtenir le résultat suivant. Notez la nouvelle colonne **"Collections"** qui va représenter les relations Parent-Enfants de votre organigramme.
 
-Pensez à renommer votre requête.
-
-![](Pictures/021.png)
 
 Maintenant que vous avez la matière de base, vous pouvez continuer à développer votre rapport comme bon vous semble. Par exemple, utiliser la fonctionnalité **"Split Column by delimiter"** afin de créer une colonne par enfant de votre organigramme, pour les utiliser ensuite avec le visuel **"Decomposition tree"**.
 
