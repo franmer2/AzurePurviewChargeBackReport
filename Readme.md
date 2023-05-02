@@ -328,7 +328,7 @@ Cependant, même si ça fonctionnait très bien avec Power BI Desktop, une fois 
 
 ![](Pictures/027.png)
 
-*"Processing error: [Unable to combine data] Section1/AzurePurviewData/Removed Other Columns references other queries or steps, so it may not directly access a data source. Please rebuild this data combination."*
+*"Processing error: [Unable to combine data] Section1/AzurePurviewData/Removed Other Columns references other queries or steps, so it may not directly access a data source. Please rebuild this data combination." *
 
 J'ai donc dû fusionner mes 2 premières requêtes (obtention du token puis connexion à Azure Purview) puis bien définir les niveaux de confidentialité.
 
